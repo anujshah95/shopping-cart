@@ -1,6 +1,5 @@
-###################
 Shoppig Cart API
-###################
+
 
 Rest API for shopping cart which allows to CRUD operations for category,product and cart
 
