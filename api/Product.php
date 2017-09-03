@@ -5,8 +5,6 @@
 	*/
 	require_once("./Rest.inc.php");
 	class Product extends REST {
-		private $sTableName = "products";
-
 		public function __construct()
 		{
 			parent::__construct();	// Parent contructor initialization
@@ -21,8 +19,8 @@
 		public function create()
 		{
 			//Validate request method
-			if($this->get_request_method() != "POST"){
-				$this->method_not_allowed();
+			if($this->getRequestMethod() != "POST"){
+				$this->methodNotAllowed();
 			}
 			
 			// Input validations
@@ -37,7 +35,7 @@
 				'dCreated'				=> date("Y-m-d H:i:s")
 			);
 
-			$iProId   = $this->InsertRecord($this->sTableName,$arrProductData);
+			$iProId   = $this->insertRecord($this->_sProductTable,$arrProductData);
 			$iStatus  = ($iProId>0) ? "Success" : "False";
 			$sMessage = ($iProId>0) ? "Product added successfully." : "Fail to add.";
 
@@ -55,8 +53,8 @@
 		public function update()
 		{
 			//Validate request method
-			if($this->get_request_method() != "POST"){
-				$this->method_not_allowed();
+			if($this->getRequestMethod() != "POST"){
+				$this->methodNotAllowed();
 			}
 			
 			// Input validations
@@ -82,7 +80,7 @@
 
 			$sWhere	 = "iProductId = '".$iProductId."'";
 
-			$bStatus = $this->UpdateRecord($this->sTableName,$arrProData,$sWhere);
+			$bStatus = $this->updateRecord($this->_sProductTable,$arrProData,$sWhere);
 			$iStatus = ($bStatus>0) ? "Success" : "False";
 			$sMessage= ($bStatus>0) ? "Updated successfully." : "Fail to update.";
 
@@ -100,8 +98,8 @@
 		public function delete()
 		{
 			//Validate request method
-			if($this->get_request_method() != "DELETE"){
-				$this->method_not_allowed();
+			if($this->getRequestMethod() != "DELETE"){
+				$this->methodNotAllowed();
 			}
 
 			// Input validations
@@ -111,7 +109,7 @@
 
 			if($iProductId > 0){
 				$sWhere 		= "iProductId = '".$iProductId."'";
-				$iDeleteStatus 	= $this->DeleteRecord($this->sTableName,$sWhere);
+				$iDeleteStatus 	= $this->deleteRecord($this->_sProductTable,$sWhere);
 				$iStatus 		= ($iDeleteStatus>0) ? "Success" : "False";
 				$sMessage		= ($iDeleteStatus>0) ? "Deleted successfully." : "Fail to delete.";
 			}else{
@@ -132,12 +130,12 @@
 		public function retrieve()
 		{
 			//Validate request method
-			if($this->get_request_method() != "GET"){
-				$this->method_not_allowed();
+			if($this->getRequestMethod() != "GET"){
+				$this->methodNotAllowed();
 			}
 
 			$arrGetData   = array("fields"=>"p.iProductId,c.sCategoryName,p.sProductName,p.txtProductDescription,p.iProductPrice,p.iProductDiscount,p.dCreated");
-			$arrProList	  = $this->GetRecord($this->sTableName.' p',$arrGetData,'product-join');
+			$arrProList	  = $this->getRecord($this->_sProductTable.' p',$arrGetData,'product-join');
 			$iStatus 	  = (count($arrProList)>0) ? 'Success' : 'False';
 			$sMessage	  = (count($arrProList)>0) ? 'Total '.count($arrProList).' record(s) found.' : "Record not found.";
 			$arrData 	  = (count($arrProList)>0) ? $arrProList : "Record not found.";

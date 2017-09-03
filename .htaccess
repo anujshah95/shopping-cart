@@ -3,11 +3,11 @@
 
 	RewriteCond %{REQUEST_FILENAME} !-d
     RewriteCond %{REQUEST_FILENAME} !-s
-	RewriteRule ^(.*)$ init.php?request=$1 [QSA,NC,L]
+	RewriteRule ^(.*)$ Init.php?request=$1 [QSA,NC,L]
 
 	RewriteCond %{REQUEST_FILENAME} -d
-	RewriteRule ^(.*)$ init.php [QSA,NC,L]
+	RewriteRule ^(.*)$ Init.php [QSA,NC,L]
 
 	RewriteCond %{REQUEST_FILENAME} -s
-	RewriteRule ^(.*)$ init.php [QSA,NC,L]	
+	RewriteRule ^(.*)$ Init.php [QSA,NC,L]	
 </IfModule>

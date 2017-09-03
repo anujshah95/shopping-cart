@@ -5,8 +5,6 @@
 	*/
 	require_once("./Rest.inc.php");
 	class Category extends REST {
-		private $sTableName = "categories";
-
 		public function __construct()
 		{
 			parent::__construct();	// Parent contructor initialization
@@ -21,8 +19,8 @@
 		public function create()
 		{
 			//Validate request method
-			if($this->get_request_method() != "POST"){
-				$this->method_not_allowed();
+			if($this->getRequestMethod() != "POST"){
+				$this->methodNotAllowed();
 			}
 
 			// Input validations
@@ -35,7 +33,7 @@
 				'dCreated'				=> date("Y-m-d H:i:s")
 			);
 
-			$iCatId   = $this->InsertRecord($this->sTableName,$arrCategoryData);
+			$iCatId   = $this->insertRecord($this->_sCategoryTable,$arrCategoryData);
 			$iStatus  = ($iCatId>0) ? "Success" : "False";
 			$sMessage = ($iCatId>0) ? "Category added successfully." : "Fail to add.";
 
@@ -53,8 +51,8 @@
 		public function update()
 		{
 			//Validate request method
-			if($this->get_request_method() != "POST"){
-				$this->method_not_allowed();
+			if($this->getRequestMethod() != "POST"){
+				$this->methodNotAllowed();
 			}
 			
 			// Input validations
@@ -73,7 +71,7 @@
 			$iCategoryId = (int)$this->_arrRequest['iCategoryId'];
 
 			$sWhere	 = "iCategoryId = '".$iCategoryId."'";
-			$bStatus = $this->UpdateRecord($this->sTableName,$arrCategoryData,$sWhere);
+			$bStatus = $this->updateRecord($this->_sCategoryTable,$arrCategoryData,$sWhere);
 			$iStatus = ($bStatus>0) ? "Success" : "False";
 			$sMessage= ($bStatus>0) ? "Updated successfully." : "Fail to update.";
 
@@ -91,8 +89,8 @@
 		public function delete()
 		{
 			//Validate request method
-			if($this->get_request_method() != "DELETE"){
-				$this->method_not_allowed();
+			if($this->getRequestMethod() != "DELETE"){
+				$this->methodNotAllowed();
 			}
 
 			// Input validations
@@ -102,7 +100,7 @@
 
 			if($iCategoryId > 0){
 				$sWhere 		= "iCategoryId = '".$iCategoryId."'";
-				$iDeleteStatus 	= $this->DeleteRecord($this->sTableName,$sWhere);
+				$iDeleteStatus 	= $this->deleteRecord($this->_sCategoryTable,$sWhere);
 				$iStatus 		= ($iDeleteStatus>0) ? "Success" : "False";
 				$sMessage		= ($iDeleteStatus>0) ? "Deleted successfully." : "Fail to delete.";
 			}else{
@@ -123,12 +121,12 @@
 		public function retrieve()
 		{
 			//Validate request method
-			if($this->get_request_method() != "GET"){
-				$this->method_not_allowed();
+			if($this->getRequestMethod() != "GET"){
+				$this->methodNotAllowed();
 			}
 
 			$arrGetData   = array("fields"=>"iCategoryId,sCategoryName,txtCategoryDescription,iCategoryTax,dCreated");
-			$arrCatList	  = $this->GetRecord($this->sTableName,$arrGetData);
+			$arrCatList	  = $this->getRecord($this->_sCategoryTable,$arrGetData);
 			$iStatus 	  = (count($arrCatList)>0) ? 'Success' : 'False';
 			$sMessage	  = (count($arrCatList)>0) ? 'Total '.count($arrCatList).' record(s) found.' : "Record not found.";
 			$arrData 	  = (count($arrCatList)>0) ? $arrCatList : "Record not found.";

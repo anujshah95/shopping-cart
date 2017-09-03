@@ -3,12 +3,8 @@
 	 * Author : Anuj Shah
 	 * 
 	*/
-	class REST {
-	    // Database credentials
-	    private $_sHost 		= "localhost";
-	    private $_sDBName 		= "shopping_cart";
-	    private $_sUserName 	= "root";
-	    private $_sPassword 	= "anujshah";
+	require_once("DbConfig.php");
+	class REST extends DbConfig{
 		private $_iCode 		= 200;
 
 		public $_sContentType 	= "application/json";
@@ -16,8 +12,8 @@
 		
 		public function __construct()
 		{
+			parent::__construct();  // Parent contructor initialization
 			$this->inputs();
-			$this->_arrCon=$this->dbConnect();	// Initiate Database connection
 		}
 		
 	    /**
@@ -28,7 +24,7 @@
 	    */
 		private function inputs()
 		{
-			switch($this->get_request_method()){
+			switch($this->getRequestMethod()){
 				case "POST":
 					$this->_arrRequest = $this->cleanInputs($_POST);
 					break;
@@ -36,23 +32,19 @@
 				case "DELETE":
 					$this->_arrRequest = $this->cleanInputs($_GET);
 					break;
-				case "PUT":
-					parse_str(file_get_contents("php://input"),$this->_arrRequest);
-					$this->_arrRequest = $this->cleanInputs($this->_arrRequest);
-					break;
 				default:
-					$this->method_not_allowed();
+					$this->methodNotAllowed();
 					break;
 			}
 		}
 
 	    /**
-	        * Function Name : get_request_method
-	        * get_request_method function used to return request method
+	        * Function Name : getRequestMethod
+	        * getRequestMethod function used to return request method
 	        *
 	        * @return string
 	    */
-		public function get_request_method()
+		public function getRequestMethod()
 		{
 			return $_SERVER['REQUEST_METHOD'];
 		}
@@ -81,28 +73,6 @@
 		}
 
 	    /**
-	        * Function Name : dbConnect
-	        * dbConnect function used to connect db
-	        *
-	        * @return array
-	    */
-		private function dbConnect()
-		{
-			/*
-			$arrCon=new PDO("mysql:host={$this->_sHost};dbname={$this->_sDBName}", $this->_sUserName,$this->_sPassword,
-				array(PDO::MYSQL_ATTR_INIT_COMMAND => "SET NAMES 'utf8'"));
-			return $arrCon;
-			*/
-			 $arrCon = mysqli_connect($this->_sHost,$this->_sUserName,$this->_sPassword,$this->_sDBName);
-			if (mysqli_connect_errno()){
-		  		echo "Failed to connect to MySQL: " . mysqli_connect_error();
-		  		exit;
-		  	}else{
-		  		return $arrCon;
-		  	}
-		}
-
-	    /**
 	        * Function Name : response
 	        * response function used to set headers and print it
 	        *
@@ -111,18 +81,18 @@
 		public function response($arrData,$iStatus)
 		{
 			$this->_iCode = ($iStatus)?$iStatus:200;
-			$this->set_headers();
+			$this->setHeaders();
 			echo $arrData;
 			exit;
 		}
 
 	    /**
-	        * Function Name : get_status_message
-	        * get_status_message function used to store diff http code
+	        * Function Name : getStatusMessage
+	        * getStatusMessage function used to store diff http code
 	        *
 	        * @return string
 	    */		
-		private function get_status_message()
+		private function getStatusMessage()
 		{
 			$iStatus = array(
 						100 => 'Continue',  
@@ -170,13 +140,13 @@
 		}		
 		
 	    /**
-	        * Function Name : set_headers
-	        * set_headers function used to set headers
+	        * Function Name : setHeaders
+	        * setHeaders function used to set headers
 	        *
 	    */		
-		private function set_headers()
+		private function setHeaders()
 		{
-			header("HTTP/1.1 ".$this->_iCode." ".$this->get_status_message());
+			header("HTTP/1.1 ".$this->_iCode." ".$this->getStatusMessage());
 			header("Content-Type:".$this->_sContentType);
 		}
 
@@ -222,6 +192,7 @@
 			}
 
 			if($bError){
+				echo $sField; 
 				$arrResponse['status']	= $iStatus;
 				$arrResponse['message']	= $sMessage;
 				$this->response($this->json($arrResponse), 200);
@@ -230,12 +201,12 @@
 		}
 
 	    /**
-	        * Function Name : method_not_allowed
-	        * method_not_allowed function used to display not allowed method error
+	        * Function Name : methodNotAllowed
+	        * methodNotAllowed function used to display not allowed method error
 	        *
 	        * @return json
 	    */	
-		public function method_not_allowed()
+		public function methodNotAllowed()
 		{
 			$arrResponse['status']	= 'False';
 			$arrResponse['message']	= 'Method not allowed';
@@ -243,12 +214,12 @@
 		}
 
 	    /**
-	        * Function Name : method_not_found
-	        * method_not_found function used to display not found method error
+	        * Function Name : methodNotFound
+	        * methodNotFound function used to display not found method error
 	        *
 	        * @return json
 	    */
-		public function method_not_found()
+		public function methodNotFound()
 		{
 			$arrResponse['status']	= 'False';
 			$arrResponse['message']	= 'Method not found';
@@ -256,12 +227,26 @@
 		}
 
 	    /**
-	        * Function Name : InsertRecord
-	        * InsertRecord function used to insert record to db
+	        * Function Name : checkMethodExists
+	        * checkMethodExists function used to check whether method is exists or not in respected file
+	        *
+	        * @return boolean
+	    */
+		public function checkMethodExists($objFile,$sMethodName)
+		{
+            if((int)method_exists($objFile,$sMethodName) > 0){
+                return TRUE;
+            }
+            return FALSE;
+		}
+
+	    /**
+	        * Function Name : insertRecord
+	        * insertRecord function used to insert record to db
 	        *
 	        * @return int
 	    */
-		public function InsertRecord($sTableName, array $arrValues)
+		public function insertRecord($sTableName, array $arrValues)
 		{
 			$iInsertId=0;	
 			if(!empty($arrValues)){
@@ -280,12 +265,12 @@
 		}
 
 	    /**
-	        * Function Name : UpdateRecord
-	        * UpdateRecord function used to update record to db
+	        * Function Name : updateRecord
+	        * updateRecord function used to update record to db
 	        *
 	        * @return int
 	    */
-		public function UpdateRecord($sTableName,array $arrValues,$sWhere="")
+		public function updateRecord($sTableName,array $arrValues,$sWhere="")
 		{
 			$iTotalUpdated=0;
 			if(!empty($arrValues)){
@@ -309,12 +294,12 @@
 		}
 
 	    /**
-	        * Function Name : DeleteRecord
-	        * DeleteRecord function used to delete record from db
+	        * Function Name : deleteRecord
+	        * deleteRecord function used to delete record from db
 	        *
 	        * @return int
 	    */
-		public function DeleteRecord($sTableName, $sWhere)
+		public function deleteRecord($sTableName, $sWhere)
 		{
 			$iDeleteStatus=0;
 			$sQueryString = "delete from ".$sTableName." ";
@@ -329,12 +314,12 @@
 		}
 
 	    /**
-	        * Function Name : GetRecord
-	        * GetRecord function used to get record from db
+	        * Function Name : getRecord
+	        * getRecord function used to get record from db
 	        *
 	        * @return array
 	    */
-		public function GetRecord($sTableName,array $arrData,$sJoinCondition=NULL)
+		public function getRecord($sTableName,array $arrData,$sJoinCondition=NULL)
 		{
 			$arrRecord = array();
 			$sJoin 	   = "";
@@ -344,10 +329,10 @@
 			}
 
 			if($sJoinCondition=='product-join'){
-				$sJoin		= "LEFT JOIN categories c ON c.iCategoryId = p.iCategoryId";
+				$sJoin		= "LEFT JOIN $this->_sCategoryTable c ON c.iCategoryId = p.iCategoryId";
 			}
 			if($sJoinCondition=='cart-join'){
-				$sJoin		= "LEFT JOIN products p ON c.iProductId = p.iProductId";
+				$sJoin		= "LEFT JOIN $this->_sProductTable p ON c.iProductId = p.iProductId";
 			}
 			$sQueryString 	= "select ".$arrData['fields']." from ".$sTableName." ".$sJoin." where 1=1 ";
 			$objQuery  		= mysqli_query($this->_arrCon,$sQueryString);
@@ -363,17 +348,17 @@
 		}
 
 	    /**
-	        * Function Name : GetCartAmount
-	        * GetCartAmount function used to calculate field and return
+	        * Function Name : getCartAmount
+	        * getCartAmount function used to calculate field and return
 	        *
 	        * @return array
 	    */
-		public function GetCartAmount($sTableName,$sField)
+		public function getCartAmount($sTableName,$sField)
 		{
 			$arrResult=array();
 			if($sField!=""){
-				$sQueryString 	= "select sum(".$sField.") as ".$sField." from ".$sTableName." where 1=1 ";
-				$objQuery  		= mysqli_query($this->_arrCon,$sQueryString);
+				$sQueryString = "select sum(".$sField.") as ".$sField." from ".$sTableName." where 1=1 ";
+				$objQuery  	  = mysqli_query($this->_arrCon,$sQueryString);
 
 				if(@mysqli_num_rows($objQuery)>0){
 					$arrResult=mysqli_fetch_assoc($objQuery);

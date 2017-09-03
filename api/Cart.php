@@ -5,8 +5,6 @@
 	*/
 	require_once("./Rest.inc.php");
 	class Cart extends REST {
-		private $sTableName = "carts";
-
 		public function __construct()
 		{
 			parent::__construct();	// Parent contructor initialization
@@ -21,8 +19,8 @@
 		public function create()
 		{
 			//Validate request method
-			if($this->get_request_method() != "POST"){
-				$this->method_not_allowed();
+			if($this->getRequestMethod() != "POST"){
+				$this->methodNotAllowed();
 			}
 
 			// Input validations
@@ -40,7 +38,7 @@
 				'dCreated'			=> date("Y-m-d H:i:s")
 			);
 
-			$iCartId  = $this->InsertRecord($this->sTableName,$arrCartData);
+			$iCartId  = $this->insertRecord($this->_sCartTable,$arrCartData);
 			$iStatus  = ($iCartId>0) ? "Success" : "False";
 			$sMessage = ($iCartId>0) ? "Cart added successfully." : "Fail to add.";
 
@@ -58,8 +56,8 @@
 		public function update()
 		{
 			//Validate request method
-			if($this->get_request_method() != "POST"){
-				$this->method_not_allowed();
+			if($this->getRequestMethod() != "POST"){
+				$this->methodNotAllowed();
 			}
 			
 			// Input validations
@@ -69,7 +67,7 @@
 
 			if($iProductId > 0){
 				$sWhere 		= "iProductId = '".$iProductId."'";
-				$iDeleteStatus 	= $this->DeleteRecord($this->sTableName,$sWhere);
+				$iDeleteStatus 	= $this->deleteRecord($this->_sCartTable,$sWhere);
 				$iStatus 		= ($iDeleteStatus>0) ? "Success" : "False";
 				$sMessage		= ($iDeleteStatus>0) ? "Cart updated." : "Fail to update.";
 			}else{
@@ -90,8 +88,8 @@
 		public function delete()
 		{
 			//Validate request method
-			if($this->get_request_method() != "DELETE"){
-				$this->method_not_allowed();
+			if($this->getRequestMethod() != "DELETE"){
+				$this->methodNotAllowed();
 			}
 
 			// Input validations
@@ -101,7 +99,7 @@
 
 			if($iCartId > 0){
 				$sWhere 		= "iCartId = '".$iCartId."'";
-				$iDeleteStatus 	= $this->DeleteRecord($this->sTableName,$sWhere);
+				$iDeleteStatus 	= $this->deleteRecord($this->_sCartTable,$sWhere);
 				$iStatus 		= ($iDeleteStatus>0) ? "Success" : "False";
 				$sMessage		= ($iDeleteStatus>0) ? "Deleted successfully." : "Fail to delete.";
 			}else{
@@ -122,12 +120,12 @@
 		public function retrieve()
 		{
 			//Validate request method
-			if($this->get_request_method() != "GET"){
-				$this->method_not_allowed();
+			if($this->getRequestMethod() != "GET"){
+				$this->methodNotAllowed();
 			}
 
 			$arrGetData   = array("fields"=>"c.sCartName,p.sProductName,c.iTotal,c.iTotalDiscount,c.iTotalWithDiscount,c.iTotalTax,c.iTotalWithTax,c.iGrandTotal");
-			$arrCartList  = $this->GetRecord($this->sTableName.' c',$arrGetData,'cart-join');
+			$arrCartList  = $this->getRecord($this->_sCartTable.' c',$arrGetData,'cart-join');
 			$iStatus 	  = (count($arrCartList)>0) ? 'Success' : 'False';
 			$sMessage	  = (count($arrCartList)>0) ? 'Total '.count($arrCartList).' record(s) found.' : "Record not found.";
 			$arrData 	  = (count($arrCartList)>0) ? $arrCartList : "Record not found.";
@@ -146,11 +144,11 @@
 	        *
 	        * @return json
 	    */	
-		public function cart_amount()
+		public function cartAmount()
 		{
 			//Validate request method
-			if($this->get_request_method() != "GET"){
-				$this->method_not_allowed();
+			if($this->getRequestMethod() != "GET"){
+				$this->methodNotAllowed();
 			}
 
 			$this->validation(array('target'));
@@ -158,19 +156,19 @@
 			$arrAllowed=array('total','total-discount','total-tax');
 			$sTarget=$this->_arrRequest['target'];
 
-			if(!in_array($sTarget, $arrAllowed)) $this->method_not_found();
+			if(!in_array($sTarget, $arrAllowed)) $this->methodNotFound();
 
 			$sField="";
 			if($sTarget=='total') $sField='iGrandTotal';
 			if($sTarget=='total-discount') $sField='iTotalDiscount';
 			if($sTarget=='total-tax') $sField='iTotalTax';
 
-			$arrResult  = $this->GetCartAmount($this->sTableName,$sField);
+			$arrResult  = $this->getCartAmount($this->_sCartTable,$sField);
 			$iStatus 	= (count($arrResult)>0) ? 'Success' : 'False';
 			$arrData 	= (count($arrResult)>0) ? $arrResult : "Record not found.";
 
-			$arrResponse['status']		= $iStatus;
-			$arrResponse['data']		= $arrData;
+			$arrResponse['status'] = $iStatus;
+			$arrResponse['data']   = $arrData;
 			$this->response($this->json($arrResponse), 200);
 		}
 	}

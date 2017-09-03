@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: localhost
--- Generation Time: Sep 01, 2017 at 10:58 AM
+-- Generation Time: Sep 04, 2017 at 02:15 AM
 -- Server version: 5.5.54-0ubuntu0.14.04.1
 -- PHP Version: 5.5.9-1ubuntu4.21
 
@@ -17,16 +17,16 @@ SET time_zone = "+00:00";
 /*!40101 SET NAMES utf8 */;
 
 --
--- Database: `shopping_cart`
+-- Database: `ShoppingCart`
 --
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `carts`
+-- Table structure for table `Carts`
 --
 
-CREATE TABLE IF NOT EXISTS `carts` (
+CREATE TABLE IF NOT EXISTS `Carts` (
   `iCartId` int(11) NOT NULL AUTO_INCREMENT,
   `sCartName` varchar(256) NOT NULL,
   `iProductId` int(11) NOT NULL,
@@ -44,10 +44,10 @@ CREATE TABLE IF NOT EXISTS `carts` (
 -- --------------------------------------------------------
 
 --
--- Table structure for table `categories`
+-- Table structure for table `Categories`
 --
 
-CREATE TABLE IF NOT EXISTS `categories` (
+CREATE TABLE IF NOT EXISTS `Categories` (
   `iCategoryId` int(11) NOT NULL AUTO_INCREMENT,
   `sCategoryName` varchar(256) NOT NULL,
   `txtCategoryDescription` text NOT NULL,
@@ -58,21 +58,21 @@ CREATE TABLE IF NOT EXISTS `categories` (
 ) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=4 ;
 
 --
--- Dumping data for table `categories`
+-- Dumping data for table `Categories`
 --
 
-INSERT INTO `categories` (`iCategoryId`, `sCategoryName`, `txtCategoryDescription`, `iCategoryTax`, `dCreated`, `dModified`) VALUES
-(1, 'Clothes', 'Fancy clothes', 12, '2017-09-01 10:48:23', '2017-09-01 05:18:23'),
+INSERT INTO `Categories` (`iCategoryId`, `sCategoryName`, `txtCategoryDescription`, `iCategoryTax`, `dCreated`, `dModified`) VALUES
+(1, 'Clothes', 'Fancy clothes', 12, '2017-09-01 10:48:23', '2017-09-03 20:25:51'),
 (2, 'Jackets', 'Fancy jackets', 18, '2017-09-01 10:48:51', '2017-09-01 05:18:51'),
 (3, 'Shoes', 'Fancy shoes', 12, '2017-09-01 10:49:29', '2017-09-01 05:19:29');
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `products`
+-- Table structure for table `Products`
 --
 
-CREATE TABLE IF NOT EXISTS `products` (
+CREATE TABLE IF NOT EXISTS `Products` (
   `iProductId` int(11) NOT NULL AUTO_INCREMENT,
   `iCategoryId` int(11) NOT NULL,
   `sProductName` varchar(256) NOT NULL,
@@ -85,10 +85,10 @@ CREATE TABLE IF NOT EXISTS `products` (
 ) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=5 ;
 
 --
--- Dumping data for table `products`
+-- Dumping data for table `Products`
 --
 
-INSERT INTO `products` (`iProductId`, `iCategoryId`, `sProductName`, `txtProductDescription`, `iProductPrice`, `iProductDiscount`, `dCreated`, `dModified`) VALUES
+INSERT INTO `Products` (`iProductId`, `iCategoryId`, `sProductName`, `txtProductDescription`, `iProductPrice`, `iProductDiscount`, `dCreated`, `dModified`) VALUES
 (1, 3, 'Adidas Neo', 'adidas neo shoes', 2200, 0, '2017-09-01 10:51:27', '2017-09-01 05:21:27'),
 (2, 3, 'Nike sports', 'Nike sports shoes', 1600, 10, '2017-09-01 10:52:00', '2017-09-01 05:22:00'),
 (3, 2, 'Puma jackets', 'Nike sports shoes', 2500, 12, '2017-09-01 10:52:47', '2017-09-01 05:22:47');
