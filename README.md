@@ -96,4 +96,3 @@ RESTFul shopping cart api using Object oriented PHP
 	- int iCaategoryId;
 	- bool bStatus;
 	- string sProductName;
-	- boo
