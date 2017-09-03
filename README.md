@@ -10,6 +10,7 @@ Instructions
 2. Give permissions (644)
 3. Import SQL (Path : sql/ShoppingCart.sql)
 4. API Descriptions
+
 Category
 	http://localhost/shopping-cart/api/category/create (POST)
 	-To create a category
