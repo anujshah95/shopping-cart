@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 <IfModule mod_rewrite.c>
     RewriteEngine On
 
@@ -12,18 +11,3 @@
 	RewriteCond %{REQUEST_FILENAME} -s
 	RewriteRule ^(.*)$ Init.php [QSA,NC,L]	
 </IfModule>
-=======
-<IfModule mod_rewrite.c>
-    RewriteEngine On
-
-	RewriteCond %{REQUEST_FILENAME} !-d
-    RewriteCond %{REQUEST_FILENAME} !-s
-	RewriteRule ^(.*)$ init.php?request=$1 [QSA,NC,L]
-
-	RewriteCond %{REQUEST_FILENAME} -d
-	RewriteRule ^(.*)$ init.php [QSA,NC,L]
-
-	RewriteCond %{REQUEST_FILENAME} -s
-	RewriteRule ^(.*)$ init.php [QSA,NC,L]	
-</IfModule>
->>>>>>> 7223c61b8eff628d8735efeb4b3bd73dff4f8977
