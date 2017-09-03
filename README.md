@@ -12,6 +12,7 @@ Instructions
 4. API Descriptions
 
 Category
+
 	http://localhost/shopping-cart/api/category/create (POST)
 	-To create a category
 	-Required fields are :
