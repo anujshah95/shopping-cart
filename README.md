@@ -93,7 +93,7 @@ RESTFul shopping cart api using Object oriented PHP
 - Classes->PascalCase (i.e. Category)
 - Methods->camelCase  (i.e. insertRecord)
 - Variables->Hungarian notation (The prefix encodes the actual data type of the variable)
-i.e. 	- int iCaategoryId;
+	- int iCaategoryId;
 	- bool bStatus;
 	- string sProductName;
 	- boo
