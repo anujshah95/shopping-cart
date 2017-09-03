@@ -1,43 +1,47 @@
 Shoppig Cart API
 
-Rest API for shopping cart which allows to CRUD operations for category,product and cart
-
+RESTFul shopping cart api using Object oriented PHP
 
 ************
 Instructions
 ************
 
-1. Download folder,move to the appropriate directory.
-2. Give permission
-3. Import sql (Path : sql/shopping_cart.sql)
-4. API Links
+1. Download folder,move to the root folder of web server.
+2. Give permissions (644)
+3. Import SQL (Path : sql/ShoppingCart.sql)
+4. API Descriptions
+Category
+	http://localhost/shopping-cart/api/category/create (POST)
+	-To create a category
+	-Required fields are :
+		sCategoryName,txtCategoryDescription,iCategoryTax
+	
+	http://localhost/shopping-cart/api/category/retrieve (GET)
+	
+	http://localhost/shopping-cart/api/category/update (POST)
 
-http://localhost/shoping-cart/api/cart/create (POST)
+	http://localhost/shopping-cart/api/category/delete?iCategoryId=1 (DELETE)
+	
+Product
+	http://localhost/shopping-cart/api/product/create (POST)
+	
+	http://localhost/shopping-cart/api/product/retrieve (GET)
 
-http://localhost/shoping-cart/api/cart/update (POST)
+	http://localhost/shopping-cart/api/product/update (POST)
+	
+	http://localhost/shopping-cart/api/product/delete?iProductId=5 (DELETE)
+	
+Cart
+	http://localhost/shopping-cart/api/cart/create (POST)
+	
+	http://localhost/shopping-cart/api/cart/retrieve (GET)
 
-http://localhost/shoping-cart/api/cart/delete?iCategoryId=1 (DELETE)
+	http://localhost/shopping-cart/api/cart/update (POST)
 
-http://localhost/shoping-cart/api/cart/retrieve (GET)
+	http://localhost/shopping-cart/api/cart/delete?iCartId=8 (DELETE)
 
-http://localhost/shoping-cart/api/product/create (POST)
+	http://localhost/shopping-cart/api/cart/cartAmount?target=total (GET)
 
-http://localhost/shoping-cart/api/product/update (POST)
+	http://localhost/shopping-cart/api/cart/cartAmount?target=total-tax (GET)
 
-http://localhost/shoping-cart/api/product/delete?iProductId=5 (DELETE)
-
-http://localhost/shoping-cart/api/product/retrieve (GET)
-
-http://localhost/shoping-cart/api/cart/create (POST)
-
-http://localhost/shoping-cart/api/cart/update (POST)
-
-http://localhost/shoping-cart/api/cart/delete?iCartId=8 (DELETE)
-
-http://localhost/shoping-cart/api/cart/retrieve (GET)
-
-http://localhost/shoping-cart/api/cart/cart-amount?target=total (GET)
-
-http://localhost/shoping-cart/api/cart/cart-amount?target=total-tax (GET)
-
-http://localhost/shoping-cart/api/cart/cart-amount?target=total-discount (GET)
+	http://localhost/shopping-cart/api/cart/cartAmount?target=total-discount (GET)
